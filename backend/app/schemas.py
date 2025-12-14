@@ -9,6 +9,11 @@ class ArticleBase(BaseModel):
     published_at: datetime
     body: str
 
+class AuthorSchema(BaseModel):
+    username: str
+    class Config:
+        orm_mode = True
+
 class ArticleCreate(ArticleBase):
     pass
 
@@ -22,7 +27,7 @@ class ArticleOut(ArticleBase):
     id: UUID
     created_by: UUID
     created_at: datetime
-    author_username: Optional[str] = None
+    author: Optional[AuthorSchema] = None 
 
     class Config:
         orm_mode = True

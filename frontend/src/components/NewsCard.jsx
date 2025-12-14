@@ -1,7 +1,10 @@
 import { deleteArticle } from "../api";
 
 export function NewsCard({ article, currentUser, onDeleted, onEdit }) {
-  const canDelete = !!currentUser && article.author_username === currentUser;
+
+  const authorName = article.author?.username;
+
+  const canDelete = !!currentUser && authorName === currentUser;
   const canEdit = canDelete;
 
   const handleDelete = async () => {
@@ -36,7 +39,7 @@ export function NewsCard({ article, currentUser, onDeleted, onEdit }) {
       </div>
 
       <div className="card-footer d-flex justify-content-between align-items-center gap-2">
-        <small className="text-muted">Autor: {article.author_username || "—"}</small>
+        <small className="text-muted">Autor: {authorName || "—"}</small>
 
         <div className="d-flex gap-2">
           <button

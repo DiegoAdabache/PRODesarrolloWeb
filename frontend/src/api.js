@@ -20,8 +20,8 @@ async function apiFetch(path, options = {}) {
   return res.json();
 }
 
-export const fetchArticles = (page, pageSize = 10) =>
-  apiFetch(`/articles?page=${page}&page_size=${pageSize}`);
+export const fetchArticles = (page, pageSize = 10, search = "") =>
+  apiFetch(`/articles?page=${page}&page_size=${pageSize}&search=${encodeURIComponent(search)}`);
 
 export const fetchArticleById = (id) => apiFetch(`/articles/${id}`);
 
