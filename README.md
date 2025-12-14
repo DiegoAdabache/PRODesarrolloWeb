@@ -4,6 +4,7 @@ Integrantes del equipo:
 1. Diego Federico Romero Miravete
 2. Diego Azahed Adabache Gutiérrez
 3. Samuel Rodrigo Orduña Ferreira
+4. Johan Santiago Sánchez Rosales
 
 ## Fake Times
 
@@ -78,4 +79,3 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 Si no es la primera vez que corre el proyecto
 puede ahorrarse el paso número 5
 =======
-4. Johan Santiago Sánchez Rosales
