@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload  
+from sqlalchemy import or_                      
 from typing import List
 from uuid import UUID
 import os
@@ -62,16 +63,25 @@ def health(db: Session = Depends(get_db)):
 @app.get("/articles", response_model=List[schemas.ArticleOut])
 def list_articles(
     page: int = 1,
-    page_size: int = 10,
+    page_size: int = 6,
+    search: str = "",  
     db: Session = Depends(get_db),
 ):
     if page < 1:
         page = 1
     offset = (page - 1) * page_size
+    query = db.query(models.Article).options(joinedload(models.Article.author))
+    if search:
+        query = query.join(models.User)
+        query = query.filter(
+            or_(
+                models.Article.title.ilike(f"%{search}%"),
+                models.User.username.ilike(f"%{search}%")
+            )
+        )
 
     articles = (
-        db.query(models.Article)
-        .order_by(models.Article.published_at.desc())
+        query.order_by(models.Article.published_at.desc())
         .offset(offset)
         .limit(page_size)
         .all()

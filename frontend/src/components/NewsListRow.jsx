@@ -1,7 +1,9 @@
 import { deleteArticle } from "../api";
 
 export function NewsListRow({ article, currentUser, onDeleted, onEdit }) {
-  const canDelete = !!currentUser && article.author_username === currentUser;
+  const authorName = article.author?.username;
+
+  const canDelete = !!currentUser && authorName === currentUser;
   const canEdit = canDelete;
 
   const handleDelete = async () => {
@@ -34,7 +36,7 @@ export function NewsListRow({ article, currentUser, onDeleted, onEdit }) {
         <div className="col-8 col-md-7">
           <h5 className="mb-1">{article.title}</h5>
           <p className="mb-1 text-truncate">{article.body}</p>
-          <small className="text-muted">Autor: {article.author_username || "—"}</small>
+          <small className="text-muted">Autor: {authorName || "—"}</small>
         </div>
 
         <div className="col-12 col-md-2 d-flex justify-content-md-end gap-2">
