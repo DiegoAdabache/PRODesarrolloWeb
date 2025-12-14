@@ -1,7 +1,8 @@
 import { deleteArticle } from "../api";
 
-export function NewsListRow({ article, currentUser, onDeleted }) {
+export function NewsListRow({ article, currentUser, onDeleted, onEdit }) {
   const canDelete = !!currentUser && article.author_username === currentUser;
+  const canEdit = canDelete;
 
   const handleDelete = async () => {
     if (!currentUser) {
@@ -36,7 +37,22 @@ export function NewsListRow({ article, currentUser, onDeleted }) {
           <small className="text-muted">Autor: {article.author_username || "—"}</small>
         </div>
 
-        <div className="col-12 col-md-2 d-flex justify-content-md-end">
+        <div className="col-12 col-md-2 d-flex justify-content-md-end gap-2">
+          <button
+            className="btn btn-sm btn-outline-primary"
+            disabled={!canEdit}
+            onClick={() => onEdit?.(article)}
+            title={
+              !currentUser
+                ? "Guarda tu username para poder editar"
+                : !canEdit
+                ? "Solo puedes editar tus propias noticias"
+                : "Editar noticia"
+            }
+          >
+            Editar
+          </button>
+
           <button
             className="btn btn-sm btn-outline-danger"
             onClick={handleDelete}

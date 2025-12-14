@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchArticles } from "../api";
 import { NewsCard } from "./NewsCard";
 import { NewsListRow } from "./NewsListRow";
+import { EditArticleModal } from "./EditArticleModal";
 
 function getCurrentUser() {
   return sessionStorage.getItem("currentUser") || "";
@@ -11,6 +12,7 @@ export function NewsList() {
   const [view, setView] = useState("cards");
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1);
+  const [editingArticle, setEditingArticle] = useState(null);
 
   const currentUser = getCurrentUser();
 
@@ -28,6 +30,19 @@ export function NewsList() {
   };
 
   const handleDeleted = async () => {
+    await load();
+  };
+
+  const handleEditRequested = (article) => {
+    if (!currentUser.trim()) {
+      alert("Primero guarda tu username.");
+      return;
+    }
+    if (article.author_username !== currentUser) return; // seguridad UI
+    setEditingArticle(article);
+  };
+
+  const handleSaved = async () => {
     await load();
   };
 
@@ -59,6 +74,7 @@ export function NewsList() {
                 article={a}
                 currentUser={currentUser}
                 onDeleted={handleDeleted}
+                onEdit={handleEditRequested}
               />
             </div>
           ))}
@@ -71,6 +87,7 @@ export function NewsList() {
               article={a}
               currentUser={currentUser}
               onDeleted={handleDeleted}
+              onEdit={handleEditRequested}
             />
           ))}
         </div>
@@ -89,6 +106,15 @@ export function NewsList() {
           Siguiente
         </button>
       </div>
+
+      {/* Modal edición */}
+      {editingArticle && (
+        <EditArticleModal
+          article={editingArticle}
+          onClose={() => setEditingArticle(null)}
+          onSaved={handleSaved}
+        />
+      )}
     </section>
   );
 }

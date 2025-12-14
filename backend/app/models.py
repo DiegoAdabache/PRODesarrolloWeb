@@ -27,3 +27,7 @@ class Article(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     author = relationship("User", back_populates="articles")
+    @property
+    def author_username(self):
+        return self.author.username if self.author else None
+

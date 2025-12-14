@@ -34,7 +34,9 @@ def get_or_create_user(username: str, db: Session) -> models.User:
   return user
 
 def get_current_username(x_user: str = Header(..., alias="X-Current-User")):
-    return x_user
+    if not x_user or not x_user.strip():
+        raise HTTPException(status_code=400, detail="Username required")
+    return x_user.strip()
 
 @app.get("/health")
 def health(db: Session = Depends(get_db)):

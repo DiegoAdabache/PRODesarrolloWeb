@@ -1,7 +1,8 @@
 import { deleteArticle } from "../api";
 
-export function NewsCard({ article, currentUser, onDeleted }) {
+export function NewsCard({ article, currentUser, onDeleted, onEdit }) {
   const canDelete = !!currentUser && article.author_username === currentUser;
+  const canEdit = canDelete;
 
   const handleDelete = async () => {
     if (!currentUser) {
@@ -34,25 +35,40 @@ export function NewsCard({ article, currentUser, onDeleted }) {
         </p>
       </div>
 
-      <div className="card-footer d-flex justify-content-between align-items-center">
-        <small className="text-muted">
-          Autor: {article.author_username || "—"}
-        </small>
+      <div className="card-footer d-flex justify-content-between align-items-center gap-2">
+        <small className="text-muted">Autor: {article.author_username || "—"}</small>
 
-        <button
-          className="btn btn-sm btn-outline-danger"
-          onClick={handleDelete}
-          disabled={!canDelete}
-          title={
-            !currentUser
-              ? "Guarda tu username para poder borrar"
-              : !canDelete
-              ? "Solo puedes borrar tus propias noticias"
-              : "Borrar noticia"
-          }
-        >
-          Borrar
-        </button>
+        <div className="d-flex gap-2">
+          <button
+            className="btn btn-sm btn-outline-primary"
+            disabled={!canEdit}
+            onClick={() => onEdit?.(article)}
+            title={
+              !currentUser
+                ? "Guarda tu username para poder editar"
+                : !canEdit
+                ? "Solo puedes editar tus propias noticias"
+                : "Editar noticia"
+            }
+          >
+            Editar
+          </button>
+
+          <button
+            className="btn btn-sm btn-outline-danger"
+            onClick={handleDelete}
+            disabled={!canDelete}
+            title={
+              !currentUser
+                ? "Guarda tu username para poder borrar"
+                : !canDelete
+                ? "Solo puedes borrar tus propias noticias"
+                : "Borrar noticia"
+            }
+          >
+            Borrar
+          </button>
+        </div>
       </div>
     </div>
   );

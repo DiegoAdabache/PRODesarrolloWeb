@@ -22,6 +22,7 @@ class ArticleOut(ArticleBase):
     id: UUID
     created_by: UUID
     created_at: datetime
+    author_username: Optional[str] = None
 
     class Config:
         orm_mode = True
