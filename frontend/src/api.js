@@ -1,6 +1,6 @@
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
 
-function getCurrentUser() {
+export function getCurrentUser() {
   return sessionStorage.getItem("currentUser") || "";
 }
 
