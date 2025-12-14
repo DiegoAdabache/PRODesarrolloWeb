@@ -9,6 +9,11 @@ export function NewsForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const currentUser = sessionStorage.getItem("currentUser") || "";
+    if (!currentUser.trim()) {
+      alert("Primero guarda tu nombre de usuario (arriba a la derecha).");
+      return;
+    }
     await createArticle({
       title,
       image_url: imageUrl || null,
