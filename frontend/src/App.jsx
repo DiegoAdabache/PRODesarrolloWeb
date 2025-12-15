@@ -3,6 +3,7 @@ import { NewsList } from "./components/NewsList";
 import { NewsForm } from "./components/NewsForm";
 import { TrendingTopics } from "./components/TrendingTopics";
 import { UserSelector } from "./components/UserSelector";
+import { AuthorsSection } from "./components/AuthorsSection";
 
 export default function App() {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -22,28 +23,25 @@ export default function App() {
 
       <div className="row g-4">
         <div className="col-12 col-lg-8">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h2 className="mb-0">Noticias</h2>
-
-            <button
-              className={`btn ${showForm ? "btn-outline-secondary" : "btn-dark"}`}
-              onClick={() => setShowForm((v) => !v)}
-            >
-              {showForm ? "Cerrar" : "Nueva noticia"}
-            </button>
-          </div>
+          <button
+            className="btn btn-dark mb-3"
+            onClick={() => setShowForm((v) => !v)}
+          >
+            {showForm ? "Cerrar formulario" : "Nueva noticia"}
+          </button>
 
           {showForm && (
             <NewsForm
               onCreated={() => {
                 setRefreshKey((k) => k + 1);
-                setShowForm(false); // opcional: cerrar al publicar
+                setShowForm(false);
               }}
-              onCancel={() => setShowForm(false)}
             />
           )}
 
           <NewsList refreshKey={refreshKey} />
+
+          <AuthorsSection />
         </div>
 
         <div className="col-12 col-lg-4">

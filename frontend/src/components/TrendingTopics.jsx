@@ -14,9 +14,9 @@ export function TrendingTopics() {
       setLoading(true);
       setError("");
       try {
-        const data = await fetchTrending(period); 
+        const data = await fetchTrending(period);
         if (!alive) return;
-        setItems(data.items || []);
+        setItems((data.items || []).slice(0, 5)); // por si acaso
       } catch (e) {
         if (!alive) return;
         setError(e?.message || "Error cargando trending");
@@ -34,9 +34,12 @@ export function TrendingTopics() {
   }, [period]);
 
   return (
-    <section className="ft-trending">
+    <aside className="ft-panel">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="mb-0">Trending</h2>
+        <div>
+          <h3 className="mb-0">Trending (NYT)</h3>
+          <div className="text-muted small">Most viewed</div>
+        </div>
 
         <select
           className="form-select form-select-sm"
@@ -44,6 +47,7 @@ export function TrendingTopics() {
           value={period}
           onChange={(e) => setPeriod(Number(e.target.value))}
           aria-label="Periodo de trending"
+          disabled={loading}
         >
           <option value={1}>1 día</option>
           <option value={7}>7 días</option>
@@ -52,11 +56,7 @@ export function TrendingTopics() {
       </div>
 
       {loading && <div className="text-muted">Cargando…</div>}
-
-      {!loading && error && (
-        <div className="alert alert-warning py-2">{error}</div>
-      )}
-
+      {!loading && error && <div className="alert alert-warning py-2">{error}</div>}
       {!loading && !error && items.length === 0 && (
         <div className="text-muted">Sin resultados.</div>
       )}
@@ -71,11 +71,22 @@ export function TrendingTopics() {
             className="list-group-item list-group-item-action"
           >
             <div className="d-flex gap-3">
-              <div className="ft-thumb">
+              <div style={{ width: 56, height: 56, flexShrink: 0 }}>
                 {a.image_url ? (
-                  <img src={a.image_url} alt={a.title} />
+                  <img
+                    src={a.image_url}
+                    alt={a.title}
+                    style={{ width: 56, height: 56, borderRadius: 12, objectFit: "cover" }}
+                  />
                 ) : (
-                  <div className="ft-thumb--placeholder" />
+                  <div
+                    style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: 12,
+                      background: "#eee",
+                    }}
+                  />
                 )}
               </div>
 
@@ -84,14 +95,11 @@ export function TrendingTopics() {
                   {a.section || "NYT"} • {a.published_date || ""}
                 </div>
                 <div className="fw-semibold">{a.title}</div>
-                <div className="small text-muted ft-clamp-2">
-                  {a.abstract || ""}
-                </div>
               </div>
             </div>
           </a>
         ))}
       </div>
-    </section>
+    </aside>
   );
 }
