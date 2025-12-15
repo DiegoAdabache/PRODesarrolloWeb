@@ -12,16 +12,23 @@ async function apiFetch(path, options = {}) {
   };
 
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`API error ${res.status}: ${text}`);
   }
+
   if (res.status === 204) return null;
   return res.json();
 }
 
+
 export const fetchArticles = (page, pageSize = 10, search = "") =>
-  apiFetch(`/articles?page=${page}&page_size=${pageSize}&search=${encodeURIComponent(search)}`);
+  apiFetch(
+    `/articles?page=${page}&page_size=${pageSize}&search=${encodeURIComponent(
+      search
+    )}`
+  );
 
 export const fetchArticleById = (id) => apiFetch(`/articles/${id}`);
 
@@ -42,7 +49,12 @@ export const deleteArticle = (id) =>
     method: "DELETE",
   });
 
-export const fetchTrending = (woeid = 23424900) =>
-  apiFetch(`/trending?woeid=${woeid}`);
+
+export const fetchTrending = (period = 7) =>
+  apiFetch(`/trending/nyt?period=${period}`);
 
 export const fetchHealth = () => apiFetch(`/health`);
+
+export const fetchTrendingNYT = (page = 1, pageSize = 6) =>
+  apiFetch(`/trending/nyt?page=${page}&page_size=${pageSize}`);
+

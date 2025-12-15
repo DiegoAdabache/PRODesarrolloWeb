@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { NewsList } from "./components/NewsList";
 import { NewsForm } from "./components/NewsForm";
 import { TrendingTopics } from "./components/TrendingTopics";
 import { UserSelector } from "./components/UserSelector";
 
 export default function App() {
+  const [refreshKey, setRefreshKey] = useState(0);
+
   return (
     <div className="container py-4">
       <header className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 border-bottom pb-3">
@@ -16,18 +19,19 @@ export default function App() {
         <UserSelector />
       </header>
 
-      <div className="row">
+      <div className="row g-4">
         <div className="col-12 col-lg-8">
-          <NewsForm />
-          <NewsList />
+          <NewsForm onCreated={() => setRefreshKey((k) => k + 1)} />
+          <NewsList refreshKey={refreshKey} />
         </div>
+
         <div className="col-12 col-lg-4">
           <TrendingTopics />
         </div>
       </div>
 
       <footer className="mt-5 border-top pt-3 small text-muted">
-        <p>© 2025 Fake Times</p>
+        <p className="mb-0">© 2025 Fake Times</p>
       </footer>
     </div>
   );
