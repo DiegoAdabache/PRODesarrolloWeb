@@ -6,6 +6,7 @@ import { UserSelector } from "./components/UserSelector";
 
 export default function App() {
   const [refreshKey, setRefreshKey] = useState(0);
+  const [showForm, setShowForm] = useState(false);
 
   return (
     <div className="container py-4">
@@ -21,7 +22,27 @@ export default function App() {
 
       <div className="row g-4">
         <div className="col-12 col-lg-8">
-          <NewsForm onCreated={() => setRefreshKey((k) => k + 1)} />
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h2 className="mb-0">Noticias</h2>
+
+            <button
+              className={`btn ${showForm ? "btn-outline-secondary" : "btn-dark"}`}
+              onClick={() => setShowForm((v) => !v)}
+            >
+              {showForm ? "Cerrar" : "Nueva noticia"}
+            </button>
+          </div>
+
+          {showForm && (
+            <NewsForm
+              onCreated={() => {
+                setRefreshKey((k) => k + 1);
+                setShowForm(false); // opcional: cerrar al publicar
+              }}
+              onCancel={() => setShowForm(false)}
+            />
+          )}
+
           <NewsList refreshKey={refreshKey} />
         </div>
 
