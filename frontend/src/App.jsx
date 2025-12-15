@@ -1,0 +1,59 @@
+import { useState } from "react";
+import { NewsList } from "./components/NewsList";
+import { NewsForm } from "./components/NewsForm";
+import { TrendingTopics } from "./components/TrendingTopics";
+import { UserSelector } from "./components/UserSelector";
+
+export default function App() {
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [showForm, setShowForm] = useState(false);
+
+  return (
+    <div className="container py-4">
+      <header className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 border-bottom pb-3">
+        <div>
+          <h1 className="display-5 fw-bold">Fake Times</h1>
+          <p className="text-muted mb-0">
+            Un periódico digital inspirado en grandes diarios, pero con diseño propio.
+          </p>
+        </div>
+        <UserSelector />
+      </header>
+
+      <div className="row g-4">
+        <div className="col-12 col-lg-8">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h2 className="mb-0">Noticias</h2>
+
+            <button
+              className={`btn ${showForm ? "btn-outline-secondary" : "btn-dark"}`}
+              onClick={() => setShowForm((v) => !v)}
+            >
+              {showForm ? "Cerrar" : "Nueva noticia"}
+            </button>
+          </div>
+
+          {showForm && (
+            <NewsForm
+              onCreated={() => {
+                setRefreshKey((k) => k + 1);
+                setShowForm(false); // opcional: cerrar al publicar
+              }}
+              onCancel={() => setShowForm(false)}
+            />
+          )}
+
+          <NewsList refreshKey={refreshKey} />
+        </div>
+
+        <div className="col-12 col-lg-4">
+          <TrendingTopics />
+        </div>
+      </div>
+
+      <footer className="mt-5 border-top pt-3 small text-muted">
+        <p className="mb-0">© 2025 Fake Times</p>
+      </footer>
+    </div>
+  );
+}
